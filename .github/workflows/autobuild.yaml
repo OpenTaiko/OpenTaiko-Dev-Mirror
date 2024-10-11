@@ -58,7 +58,7 @@ jobs:
       - name: Upload All Builds
         uses: xresloader/upload-to-github-release@v1.4.2
         with:
-          file: "OpenTaiko.Win.x64.zip;OpenTaiko.Mac.x64.zip;OpenTaiko.Linux.x64.zip"
+          file: "OpenTaiko.Win.x64.zip" #"OpenTaiko.Win.x64.zip;OpenTaiko.Mac.x64.zip;OpenTaiko.Linux.x64.zip"
           overwrite: true
           tag_name: "Autobuild"
           draft: false
