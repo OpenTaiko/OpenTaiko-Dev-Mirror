@@ -61,8 +61,6 @@ jobs:
         with:
           tag_name: "${{steps.get-version.outputs.version}}"
           release_name: OpenTaiko v${{steps.get-version.outputs.version}}
-          body: |
-            Autobuild Desc
           draft: false
           prerelease: false
      
