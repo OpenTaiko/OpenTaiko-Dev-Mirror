@@ -32,10 +32,9 @@ jobs:
       - name: Create Archive (Win x64)
         shell: cmd
         run: |
-          cd OpenTaiko\bin\Release\net7.0\win-x64\publish\
-          7z a ../../../../../../OpenTaiko.Win.x64.zip * -xr!Songs/ -xr!FFmpeg/ -xr!System/
-          7z u ../../../../../../OpenTaiko.Win.x64.zip "System/Open-World Memories/*" "FFmpeg/win-x64/*" "Songs/L2 Custom Charts/*" "Songs/L3 Downloaded Songs/*" "Songs/S1 Dan-i Dojo/box.def" "Songs/S2 Taiko Towers/box.def" "Songs/X1 Favorite/*" "Songs/X2 Recent/*" "Songs/X3 Search By Difficulty/*"
-          7z rn ../../../../../../OpenTaiko.Win.x64.zip "*" "OpenTaiko Autobuild/*"
+          cd OpenTaiko\bin\Release\net7.0\win-x64\
+          7z a ../../../../../../OpenTaiko.Win.x64.zip publish/ -xr!publish/Songs/ -xr!publish/FFmpeg/ -xr!publish/System/
+          7z u ../../../../../../OpenTaiko.Win.x64.zip "publish/System/Open-World Memories/*" "publish/FFmpeg/osx-x64/*" "publish/Songs/L2 Custom Charts/*" "publish/Songs/L3 Downloaded Songs/*" "publish/Songs/S1 Dan-i Dojo/box.def" "publish/Songs/S2 Taiko Towers/box.def" "publish/Songs/X1 Favorite/*" "publish/Songs/X2 Recent/*" "publish/Songs/X3 Search By Difficulty/*"
           cd ..\..\..\..\..\..\
 
       - name: Build for Mac x64
@@ -46,10 +45,9 @@ jobs:
       - name: Create Archive (Mac x64)
         shell: cmd
         run: |
-          cd OpenTaiko\bin\Release\net7.0\osx-x64\publish\
-          7z a ../../../../../../OpenTaiko.Mac.x64.zip * -xr!Songs/ -xr!FFmpeg/ -xr!System/
-          7z u ../../../../../../OpenTaiko.Mac.x64.zip "System/Open-World Memories/*" "FFmpeg/osx-x64/*" "Songs/L2 Custom Charts/*" "Songs/L3 Downloaded Songs/*" "Songs/S1 Dan-i Dojo/box.def" "Songs/S2 Taiko Towers/box.def" "Songs/X1 Favorite/*" "Songs/X2 Recent/*" "Songs/X3 Search By Difficulty/*"
-          7z rn ../../../../../../OpenTaiko.Mac.x64.zip "*" "OpenTaiko Autobuild/*"
+          cd OpenTaiko\bin\Release\net7.0\osx-x64\
+          7z a ../../../../../../OpenTaiko.Mac.x64.zip publish/ -xr!publish/Songs/ -xr!publish/FFmpeg/ -xr!publish/System/
+          7z u ../../../../../../OpenTaiko.Mac.x64.zip "publish/System/Open-World Memories/*" "publish/FFmpeg/osx-x64/*" "publish/Songs/L2 Custom Charts/*" "publish/Songs/L3 Downloaded Songs/*" "publish/Songs/S1 Dan-i Dojo/box.def" "publish/Songs/S2 Taiko Towers/box.def" "publish/Songs/X1 Favorite/*" "publish/Songs/X2 Recent/*" "publish/Songs/X3 Search By Difficulty/*"
           cd ..\..\..\..\..\..\
       
       - name: Build for Linux x64
@@ -60,11 +58,22 @@ jobs:
       - name: Create Archive (Linux x64)
         shell: cmd
         run: |
-          cd OpenTaiko\bin\Release\net7.0\linux-x64\publish\
-          7z a ../../../../../../OpenTaiko.Linux.x64.zip * -xr!Songs/ -xr!FFmpeg/ -xr!System/
-          7z u ../../../../../../OpenTaiko.Linux.x64.zip "System/Open-World Memories/*" "FFmpeg/linux-x64/*" "Songs/L2 Custom Charts/*" "Songs/L3 Downloaded Songs/*" "Songs/S1 Dan-i Dojo/box.def" "Songs/S2 Taiko Towers/box.def" "Songs/X1 Favorite/*" "Songs/X2 Recent/*" "Songs/X3 Search By Difficulty/*"
-          7z rn ../../../../../../OpenTaiko.Linux.x64.zip "*" "OpenTaiko Autobuild/*"
+          cd OpenTaiko\bin\Release\net7.0\linux-x64\
+          7z a ../../../../../../OpenTaiko.Linux.x64.zip publish/ -xr!publish/Songs/ -xr!publish/FFmpeg/ -xr!publish/System/
+          7z u ../../../../../../OpenTaiko.Linux.x64.zip "publish/System/Open-World Memories/*" "publish/FFmpeg/osx-x64/*" "publish/Songs/L2 Custom Charts/*" "publish/Songs/L3 Downloaded Songs/*" "publish/Songs/S1 Dan-i Dojo/box.def" "publish/Songs/S2 Taiko Towers/box.def" "publish/Songs/X1 Favorite/*" "publish/Songs/X2 Recent/*" "publish/Songs/X3 Search By Difficulty/*"
           cd ..\..\..\..\..\..\
+     
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        with:
+          tag_name: "Autobuild"
+          release_name: Autobuild Test
+          body: |
+            Autobuild Desc
+          draft: false
+          prerelease: false
      
       - name: Upload All Builds
         uses: xresloader/upload-to-github-release@v1.4.2
