@@ -40,7 +40,7 @@ jobs:
         run: |
           cd OpenTaiko\bin\Release\net7.0\win-x64\
           7z a ../../../../../OpenTaiko.Win.x64.zip publish/ -xr!publish/Songs/ -xr!publish/FFmpeg/ -xr!publish/System/
-          7z u ../../../../../OpenTaiko.Win.x64.zip "publish/System/Open-World Memories/*" "publish/FFmpeg/osx-x64/*" "publish/Songs/L2 Custom Charts/*" "publish/Songs/L3 Downloaded Songs/*" "publish/Songs/S1 Dan-i Dojo/box.def" "publish/Songs/S2 Taiko Towers/box.def" "publish/Songs/X1 Favorite/*" "publish/Songs/X2 Recent/*" "publish/Songs/X3 Search By Difficulty/*"
+          7z u ../../../../../OpenTaiko.Win.x64.zip "publish/System/Open-World Memories/*" "publish/FFmpeg/win-x64/*" "publish/Songs/L2 Custom Charts/*" "publish/Songs/L3 Downloaded Songs/*" "publish/Songs/S1 Dan-i Dojo/box.def" "publish/Songs/S2 Taiko Towers/box.def" "publish/Songs/X1 Favorite/*" "publish/Songs/X2 Recent/*" "publish/Songs/X3 Search By Difficulty/*"
           cd ..\..\..\..\..\
 
       - uses: mukunku/tag-exists-action@v1.6.0
