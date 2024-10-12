@@ -46,14 +46,15 @@ jobs:
         id: get-commit-message
         run: |
           $message = git log -1 --pretty=%b
-          $message = $message -replace "`r`n", "`n"
-          echo "::set-output name=message::$message"
+          echo "COMMIT_MESSAGE<<EOF" >> $GITHUB_ENV
+          echo "$message" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Update CHANGELOG.md
         run: |
           $version = '${{steps.get-version.outputs.version}}'
           $date = '${{steps.get-date.outputs.date}}'
-          $message = '${{steps.get-commit-message.outputs.message}}' -replace "`r?`n", "`n"
+          $message = $env:COMMIT_MESSAGE
           $changelogPath = "CHANGELOG.md"
 
           # Read CHANGELOG.md content
