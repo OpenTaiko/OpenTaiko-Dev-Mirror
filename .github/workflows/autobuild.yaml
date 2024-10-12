@@ -54,7 +54,7 @@ jobs:
         run: |
           $version = '${{steps.get-version.outputs.version}}'
           $date = '${{steps.get-date.outputs.date}}'
-          $message = $env:COMMIT_MESSAGE
+          $message = '${{env.COMMIT_MESSAGE}}'
           $changelogPath = "CHANGELOG.md"
 
           # Read CHANGELOG.md content
@@ -86,7 +86,7 @@ jobs:
               $changelog = $newContent
           } else {
               # Insert new version under '# Changelog'
-              $changelog = $changelog -replace "(# Changelog)", "`$1`n`n## [$version] - $date (Beta)`n`n$message`n"
+              $changelog = $changelog -replace "(# Changelog)", "`$1`n`n## [$version] - $date (Beta)`n`n$message"
           }
 
           # Write updated content back to CHANGELOG.md
