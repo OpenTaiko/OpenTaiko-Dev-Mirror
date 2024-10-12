@@ -30,7 +30,8 @@ jobs:
         run: |
           dir
           
-      - uses: kzrnm/get-net-sdk-project-versions-action@v2
+      - name: Get version
+        uses: kzrnm/get-net-sdk-project-versions-action@v2
         id: get-version
         with:
           proj-path: OpenTaiko/OpenTaiko.csproj
@@ -117,7 +118,8 @@ jobs:
           7z u ../../../../../OpenTaiko.Linux.x64.zip "publish/FFmpeg/linux-x64/*" "publish/Songs/L2 Custom Charts/*" "publish/Songs/L3 Downloaded Songs/*" "publish/Songs/S1 Dan-i Dojo/box.def" "publish/Songs/S2 Taiko Towers/box.def" "publish/Songs/X1 Favorite/*" "publish/Songs/X2 Recent/*" "publish/Songs/X3 Search By Difficulty/*"
           cd ..\..\..\..\..\
 
-      - uses: mukunku/tag-exists-action@v1.6.0
+      - name: Check if tag exists
+        uses: mukunku/tag-exists-action@v1.6.0
         id: check-tag
         with: 
           tag: "${{steps.get-version.outputs.version}}"
