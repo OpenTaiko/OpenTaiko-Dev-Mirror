@@ -30,6 +30,31 @@ jobs:
         run: |
           dir
           
+      - name: Get commit subject for version checking
+        id: get-latest-commit
+        run: |
+          $latestCommitMessage = git log -1 --pretty=format:%s
+          echo "::set-output name=latest_commit_message::$latestCommitMessage"
+          
+      - name: Extract version from commit message
+        id: extract-version
+        run: |
+          if (${{ steps.get-latest-commit.outputs.latest_commit_message }} -match '^(?<version>[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\s-\s') {
+            $version = $matches['version']
+            Write-Host "Extracted version is: $version"
+            echo "::set-output name=version::$version"
+          } else {
+            Write-Host "No valid version found in the latest commit message. Skipping bump."
+            echo "::set-output name=version::"
+          }
+          
+      - name: Bump OpenTaiko version if necessary
+        if: steps.extract-version.outputs.version != ''
+        run: |
+          $newVersion = "${{ steps.extract-version.outputs.version }}"
+          Write-Host "Updating version in OpenTaiko.csproj to $newVersion"
+          (Get-Content OpenTaiko/OpenTaiko.csproj) -replace '<Version>.*<\/Version>', "<Version>$newVersion</Version>" | Set-Content OpenTaiko/OpenTaiko.csproj
+          
       - name: Get version
         uses: kzrnm/get-net-sdk-project-versions-action@v2
         id: get-version
@@ -42,7 +67,7 @@ jobs:
           $date = Get-Date -Format "yyyy-MM-dd"
           echo "::set-output name=date::$date"
 
-      - name: Get latest commit message
+      - name: Get changelogs from commit description
         id: get-commit-message
         run: |
           $message = git log -1 --pretty=%b
@@ -77,10 +102,11 @@ jobs:
           # Write updated content back to CHANGELOG.md
           Set-Content -Path $changelogPath -Value $changelog
 
-      - name: Commit CHANGELOG.md changes
+      - name: Commit CHANGELOG.md and OpenTaiko.csproj changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
+          git add OpenTaiko/OpenTaiko.csproj
           git add CHANGELOG.md
           git commit -m "Update changelog for version ${{steps.get-version.outputs.version}}"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
