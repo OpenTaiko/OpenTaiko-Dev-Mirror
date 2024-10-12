@@ -45,14 +45,15 @@ jobs:
       - name: Get latest commit message
         id: get-commit-message
         run: |
-          $message = git log -1 --pretty=%B
+          $message = git log -1 --pretty=%b
+          $message = $message -replace "`r`n", "`n"
           echo "::set-output name=message::$message"
 
       - name: Update CHANGELOG.md
         run: |
           $version = '${{steps.get-version.outputs.version}}'
           $date = '${{steps.get-date.outputs.date}}'
-          $message = '${{steps.get-commit-message.outputs.message}}'
+          $message = '${{steps.get-commit-message.outputs.message}}' -replace "`r?`n", "`n"
           $changelogPath = "CHANGELOG.md"
 
           # Read CHANGELOG.md content
@@ -61,7 +62,27 @@ jobs:
           # Check if the version already exists
           if ($changelog -match "## \[$version\]") {
               # Append to the existing version block
-              $changelog = $changelog -replace "(## \[$version\].*?)(\n\s*-\s*$message)?(\n\s*$)", "`$1`n- $message`$3"
+              $newContent = ""
+              $inBlock = $false
+              foreach ($line in $changelog -split "`n") {
+                  if ($line -match "## \[$version\]") {
+                      $inBlock = $true
+                  }
+
+                  if ($inBlock -and $line -match "^## ") {
+                      $inBlock = $false
+                  }
+
+                  if ($inBlock -and $line -eq "") {
+                      # Append the message just before the blank line in the version block
+                      $newContent += "`n- $message`n"
+                      $inBlock = $false
+                  }
+
+                  $newContent += $line + "`n"
+              }
+
+              $changelog = $newContent
           } else {
               # Insert new version under '# Changelog'
               $changelog = $changelog -replace "(# Changelog)", "`$1`n`n## [$version] - $date (Beta)`n`n$message`n"
