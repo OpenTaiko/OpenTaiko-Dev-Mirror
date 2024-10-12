@@ -185,3 +185,4 @@ The first public Alpha version of OpenTaiko!
 ## [0.1.0.0] (Closed Alpha)
 
 - Result screen animation
+
