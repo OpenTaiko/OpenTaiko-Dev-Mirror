@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.0.5] - 2024-10-12 (Beta)
+
+
+
 ## [0.6.0.4] - 2024-10-12 (Beta)
 
 - Super Mario in real life, twouu ✌️😉
