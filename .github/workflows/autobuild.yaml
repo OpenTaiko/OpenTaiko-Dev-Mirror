@@ -46,9 +46,7 @@ jobs:
         id: get-commit-message
         run: |
           $message = git log -1 --pretty=%b
-          $message = $message -replace '%', '%25'
-          $message = $message -replace '\n', '%0A'
-          $message = $message -replace '\r', '%0D'
+          $message = $message -replace '\r?\n', '%0A'
           echo "::set-output name=message::$message"
 
       - name: Update CHANGELOG.md
