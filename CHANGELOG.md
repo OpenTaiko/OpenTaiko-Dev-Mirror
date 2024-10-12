@@ -2,8 +2,6 @@
 
 ## [0.6.0.4] - 2024-10-12 (Beta)
 
-
-
 - Commit without version number
 - Add version auto
 - bump on the github workflow

@@ -89,14 +89,16 @@ jobs:
           # Format each item to have a leading dash
           $message = ($messageArray | ForEach-Object { "- $_" }) -join "`n"
 
-          # Check if the version already exists
-          if ($changelog -match "## \[$version\]") {
-              # Capture the existing content under the version heading
-              $changelog = $changelog -replace "(## \[($version)\] .* \(Beta\))", "`$1`n`n$message"
-            
-          } else {
-              # Insert new version under '# Changelog'
-              $changelog = $changelog -replace "(# Changelog)", "`$1`n`n## [$version] - $date (Beta)`n`n$message"
+          if ($message) {
+              # Check if the version already exists
+              if ($changelog -match "## \[$version\]") {
+                  # Capture the existing content under the version heading
+                  $changelog = $changelog -replace "(## \[($version)\] .* \(Beta\))", "`$1`n`n$message"
+                
+              } else {
+                  # Insert new version under '# Changelog'
+                  $changelog = $changelog -replace "(# Changelog)", "`$1`n`n## [$version] - $date (Beta)`n`n$message"
+              }
           }
 
           # Write updated content back to CHANGELOG.md
