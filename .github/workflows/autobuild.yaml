@@ -29,6 +29,57 @@ jobs:
         shell: cmd
         run: |
           dir
+          
+      - uses: kzrnm/get-net-sdk-project-versions-action@v2
+        id: get-version
+        with:
+          proj-path: OpenTaiko/OpenTaiko.csproj
+          
+      - name: Get current date
+        id: get-date
+        run: |
+          $date = Get-Date -Format "yyyy-MM-dd"
+          echo "::set-output name=date::$date"
+
+      - name: Get latest commit message
+        id: get-commit-message
+        run: |
+          $message = git log -1 --pretty=%B
+          echo "::set-output name=message::$message"
+
+      - name: Update CHANGELOG.md
+        run: |
+          $version = '${{steps.get-version.outputs.version}}'
+          $date = '${{steps.get-date.outputs.date}}'
+          $message = '${{steps.get-commit-message.outputs.message}}'
+          $changelogPath = "CHANGELOG.md"
+
+          # Read CHANGELOG.md content
+          $changelog = Get-Content -Path $changelogPath
+
+          # Check if the version already exists
+          if ($changelog -match "## \[$version\]") {
+              # Append to the existing version block
+              $changelog = $changelog -replace "(## \[$version\].*?)(\n\s*-\s*$message)?(\n\s*$)", "`$1`n- $message`$3"
+          } else {
+              # Insert new version under '# Changelog'
+              $changelog = $changelog -replace "(# Changelog)", "`$1`n`n## [$version] - $date (Beta)`n`n$message`n"
+          }
+
+          # Write updated content back to CHANGELOG.md
+          Set-Content -Path $changelogPath -Value $changelog -NoNewline
+
+      - name: Commit CHANGELOG.md changes
+        run: |
+          git config --global user.name ${NAME}
+          git config --global user.email ${EMAIL}
+          git add CHANGELOG.md
+          git commit -m "Update changelog for version ${{steps.get-version.outputs.version}}"
+          git push
+        env:
+          NAME: ${GITHUB_ACTOR}
+          EMAIL: ${GITHUB_ACTOR}@users.noreply.github.com
+      
 
       - name: Build for Windows x64
         shell: cmd
@@ -68,11 +119,6 @@ jobs:
           7z a ../../../../../OpenTaiko.Linux.x64.zip publish/ -xr!publish/Songs/ -xr!publish/FFmpeg/ -xr!publish/System/
           7z u ../../../../../OpenTaiko.Linux.x64.zip "publish/FFmpeg/linux-x64/*" "publish/Songs/L2 Custom Charts/*" "publish/Songs/L3 Downloaded Songs/*" "publish/Songs/S1 Dan-i Dojo/box.def" "publish/Songs/S2 Taiko Towers/box.def" "publish/Songs/X1 Favorite/*" "publish/Songs/X2 Recent/*" "publish/Songs/X3 Search By Difficulty/*"
           cd ..\..\..\..\..\
-          
-      - uses: kzrnm/get-net-sdk-project-versions-action@v2
-        id: get-version
-        with:
-          proj-path: OpenTaiko/OpenTaiko.csproj
 
       - uses: mukunku/tag-exists-action@v1.6.0
         id: check-tag
