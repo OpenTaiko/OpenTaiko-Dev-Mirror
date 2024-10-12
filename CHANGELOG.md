@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.0.6] - 2024-10-12 (Beta)
+
+- Exclude unused libs from releases
+
 ## [0.6.0.5] - 2024-10-12 (Beta)
 
 
