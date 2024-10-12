@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0.3] - 2024-10-12 (Beta)
+
+- Remove subject from git commit info to the CHANGELOG.md update
+- Try reversing to set
+- output
+- Fix line feeds
+
 ## [0.6.0.0] - 2024-10-26 (Beta)
 
 The first Beta version of OpenTaiko, including multiple structural changes! 
