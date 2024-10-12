@@ -67,18 +67,15 @@ jobs:
           }
 
           # Write updated content back to CHANGELOG.md
-          Set-Content -Path $changelogPath -Value $changelog -NoNewline
+          Set-Content -Path $changelogPath -Value $changelog
 
       - name: Commit CHANGELOG.md changes
         run: |
-          git config --global user.name ${NAME}
-          git config --global user.email ${EMAIL}
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
           git add CHANGELOG.md
           git commit -m "Update changelog for version ${{steps.get-version.outputs.version}}"
-          git push
-        env:
-          NAME: ${GITHUB_ACTOR}
-          EMAIL: ${GITHUB_ACTOR}@users.noreply.github.com
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:${{ github.ref }}
       
 
       - name: Build for Windows x64
