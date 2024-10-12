@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.1.0] - 2024-10-12 (Beta)
+
+- Test update with skin changes
+
 ## [0.6.0.7] - 2024-10-12 (Beta)
 
 - Test update without skin changes
