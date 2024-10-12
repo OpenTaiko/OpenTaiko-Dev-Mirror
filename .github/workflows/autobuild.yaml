@@ -46,7 +46,6 @@ jobs:
         id: get-commit-message
         run: |
           $message = git log -1 --pretty=%b
-          $message = $message -replace '\r?\n', '%0A'
           echo "::set-output name=message::$message"
 
       - name: Update CHANGELOG.md
@@ -59,30 +58,17 @@ jobs:
           # Read CHANGELOG.md content
           $changelog = Get-Content -Path $changelogPath
 
+          # Split the message into individual items, trim whitespace, and format
+          $messageArray = $message -split '-' | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
+
+          # Format each item to have a leading dash
+          $message = ($messageArray | ForEach-Object { "- $_" }) -join "`n"
+
           # Check if the version already exists
           if ($changelog -match "## \[$version\]") {
-              # Append to the existing version block
-              $newContent = ""
-              $inBlock = $false
-              foreach ($line in $changelog -split "`n") {
-                  if ($line -match "## \[$version\]") {
-                      $inBlock = $true
-                  }
-
-                  if ($inBlock -and $line -match "^## ") {
-                      $inBlock = $false
-                  }
-
-                  if ($inBlock -and $line -eq "") {
-                      # Append the message just before the blank line in the version block
-                      $newContent += "`n- $message`n"
-                      $inBlock = $false
-                  }
-
-                  $newContent += $line + "`n"
-              }
-
-              $changelog = $newContent
+              # Capture the existing content under the version heading
+              $changelog = $changelog -replace "(## \[($version)\] .* \(Beta\))", "`$1`n`n$message"
+            
           } else {
               # Insert new version under '# Changelog'
               $changelog = $changelog -replace "(# Changelog)", "`$1`n`n## [$version] - $date (Beta)`n`n$message"
