@@ -11,6 +11,7 @@
 ## [0.6.0.5] - 2024-10-12 (Beta)
 
 - Nothing
+- Actually something
 
 ## [0.6.0.4] - 2024-10-12 (Beta)
 
