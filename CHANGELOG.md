@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.6.0.4] - 2024-10-12 (Beta)
+
+- Add version auto
+- bump on the github workflow
+
 ## [0.6.0.3] - 2024-10-12 (Beta)
 
 - Append test
