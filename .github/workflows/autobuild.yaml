@@ -40,13 +40,13 @@ jobs:
         id: get-date
         run: |
           $date = Get-Date -Format "yyyy-MM-dd"
-          echo "date=$date >> $GITHUB_OUTPUT"
+          echo "::set-output name=date::$date"
 
       - name: Get latest commit message
         id: get-commit-message
         run: |
-          $message = git log -1 --pretty=%b
-          echo "message=$message >> $GITHUB_OUTPUT"
+          $message = git log -1 --pretty=%B
+          echo "::set-output name=message::$message"
 
       - name: Update CHANGELOG.md
         run: |
