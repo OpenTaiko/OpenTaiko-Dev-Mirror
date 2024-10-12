@@ -6,7 +6,7 @@
 
 ## [0.6.0.0] - 2024-10-26 (Beta)
 
-The first Beta version of OpenTaiko, including multiple structural changes!
+The first Beta version of OpenTaiko, including multiple structural changes! 
 
 (Note: The following logs also include all changes made on all 3 Pre 0.6.0 pre-releases (b1, b2 and b3))
 
