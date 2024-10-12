@@ -39,7 +39,7 @@ jobs:
       - name: Extract version from commit message
         id: extract-version
         run: |
-          if (${{ steps.get-latest-commit.outputs.latest_commit_message }} -match '^(?<version>[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\s-\s') {
+          if ('${{ steps.get-latest-commit.outputs.latest_commit_message }}' -match '^(?<version>[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\s-\s') {
             $version = $matches['version']
             Write-Host "Extracted version is: $version"
             echo "::set-output name=version::$version"
