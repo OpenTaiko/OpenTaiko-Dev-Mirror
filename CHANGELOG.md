@@ -4,8 +4,6 @@
 
 - no u
 
-
-
 ## [0.6.1.1] - 2024-10-15 (Beta)
 
 - Set song unlockables for collaborations
