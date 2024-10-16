@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using DiscordRPC;
 using FDK;
+using ImGuiNET;
 using SampleFramework;
 using Silk.NET.Maths;
 using SkiaSharp;
@@ -15,7 +16,7 @@ using Rectangle = System.Drawing.Rectangle;
 
 namespace OpenTaiko {
 	internal class OpenTaiko : Game {
-		// プロパティ
+		// Properties
 		#region [ properties ]
 		public static readonly string VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		public static readonly string AppDisplayThreePartVersion = GetAppDisplayThreePartVersion();
@@ -195,7 +196,7 @@ namespace OpenTaiko {
 						return c曲リストノード.nPerfect範囲ms;
 					}
 				}
-				return ConfigIni.nヒット範囲ms.Perfect;
+				return ConfigIni.nHitRangeMs.Perfect;
 			}
 		}
 		public static int nGreat範囲ms {
@@ -206,7 +207,7 @@ namespace OpenTaiko {
 						return c曲リストノード.nGreat範囲ms;
 					}
 				}
-				return ConfigIni.nヒット範囲ms.Great;
+				return ConfigIni.nHitRangeMs.Great;
 			}
 		}
 		public static int nGood範囲ms {
@@ -217,7 +218,7 @@ namespace OpenTaiko {
 						return c曲リストノード.nGood範囲ms;
 					}
 				}
-				return ConfigIni.nヒット範囲ms.Good;
+				return ConfigIni.nHitRangeMs.Good;
 			}
 		}
 		public static int nPoor範囲ms {
@@ -228,7 +229,7 @@ namespace OpenTaiko {
 						return c曲リストノード.nPoor範囲ms;
 					}
 				}
-				return ConfigIni.nヒット範囲ms.Poor;
+				return ConfigIni.nHitRangeMs.Poor;
 			}
 		}
 		#endregion
@@ -428,7 +429,7 @@ namespace OpenTaiko {
 
 		#endregion
 
-		// コンストラクタ
+		// Constructor
 
 		public OpenTaiko() : base("OpenTaiko.ico") {
 			OpenTaiko.app = this;
@@ -547,7 +548,7 @@ namespace OpenTaiko {
 		}
 
 		protected override void LoadContent() {
-			if (ConfigIni.bウィンドウモード) {
+			if (ConfigIni.bWindowMode) {
 				if (!this.bマウスカーソル表示中) {
 					this.bマウスカーソル表示中 = true;
 				}
@@ -1327,7 +1328,7 @@ namespace OpenTaiko {
 									r現在のステージ.ReleaseUnmanagedResource();
 								}
 								#region [ ESC押下時は、曲の読み込みを中止して選曲画面に戻る ]
-								if (this.n進行描画の戻り値 == (int)E曲読込画面の戻り値.読込中止) {
+								if (this.n進行描画の戻り値 == (int)ESongLoadingScreenReturnValue.LoadCanceled) {
 									//DTX.t全チップの再生停止();
 									if (DTX != null) {
 										DTX.DeActivate();
@@ -1469,7 +1470,7 @@ for (int i = 0; i < 3; i++) {
 							#endregion
 
 							switch (this.n進行描画の戻り値) {
-								case (int)E演奏画面の戻り値.再読込_再演奏:
+								case (int)EGameplayScreenReturnValue.ReloadAndReplay:
 									#region [ DTXファイルを再読み込みして、再演奏 ]
 									DTX.t全チップの再生停止();
 									DTX.DeActivate();
@@ -1496,10 +1497,10 @@ for (int i = 0; i < 3; i++) {
 								#endregion
 								//	break;
 
-								case (int)E演奏画面の戻り値.継続:
+								case (int)EGameplayScreenReturnValue.Continue:
 									break;
 
-								case (int)E演奏画面の戻り値.演奏中断:
+								case (int)EGameplayScreenReturnValue.PerformanceInterrupted:
 									#region [ 演奏キャンセル ]
 									//-----------------------------
 
@@ -1572,7 +1573,7 @@ for (int i = 0; i < 3; i++) {
 								//-----------------------------
 								#endregion
 
-								case (int)E演奏画面の戻り値.ステージ失敗:
+								case (int)EGameplayScreenReturnValue.StageFailed:
 									#region [ 演奏失敗(StageFailed) ]
 									//-----------------------------
 
@@ -1621,7 +1622,7 @@ for (int i = 0; i < 3; i++) {
 								//-----------------------------
 								#endregion
 
-								case (int)E演奏画面の戻り値.ステージクリア:
+								case (int)EGameplayScreenReturnValue.StageCleared:
 									#region [ 演奏クリア ]
 									//-----------------------------
 
@@ -1970,6 +1971,10 @@ for (int i = 0; i < 3; i++) {
 					this.b次のタイミングで垂直帰線同期切り替えを行う = false;
 				}
 				#endregion
+
+#if DEBUG
+				ImGuiDebugWindow.Draw();
+#endif
 			}
 #if !DEBUG
 			catch( Exception e )
@@ -2879,7 +2884,7 @@ for (int i = 0; i < 3; i++) {
 			GameWindowSize.Width = nWidth;
 			GameWindowSize.Height = nHeight;
 
-			WindowSize = new Silk.NET.Maths.Vector2D<int>(nWidth, nHeight);
+			//WindowSize = new Silk.NET.Maths.Vector2D<int>(nWidth, nHeight);
 		}
 
 		public void RefreshSkin() {
