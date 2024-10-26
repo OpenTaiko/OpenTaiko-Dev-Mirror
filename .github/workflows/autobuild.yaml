@@ -125,20 +125,7 @@ jobs:
           7z a ../../../../../OpenTaiko.Win.x64.zip publish/ -xr!publish/Songs/ -xr!publish/FFmpeg/ -xr!publish/System/ -xr!publish/Libs/
           7z u ../../../../../OpenTaiko.Win.x64.zip "publish/Libs/win-x64/*" "publish/FFmpeg/win-x64/*" "publish/Songs/L2 Custom Charts/*" "publish/Songs/L3 Downloaded Songs/*" "publish/Songs/S1 Dan-i Dojo/box.def" "publish/Songs/S2 Taiko Towers/box.def" "publish/Songs/X1 Favorite/*" "publish/Songs/X2 Recent/*" "publish/Songs/X3 Search By Difficulty/*"
           cd ..\..\..\..\..\
-          
-      - name: Build for Mac x64
-        shell: cmd
-        run: |
-          build-osx-x64.bat
-          
-      - name: Create Archive (Mac x64)
-        shell: cmd
-        run: |
-          cd OpenTaiko\bin\Release\net8.0\osx-x64\
-          7z a ../../../../../OpenTaiko.Mac.x64.zip publish/ -xr!publish/Songs/ -xr!publish/FFmpeg/ -xr!publish/System/ -xr!publish/Libs/
-          7z u ../../../../../OpenTaiko.Mac.x64.zip "publish/Libs/osx-x64/*" "publish/FFmpeg/osx-x64/*" "publish/Songs/L2 Custom Charts/*" "publish/Songs/L3 Downloaded Songs/*" "publish/Songs/S1 Dan-i Dojo/box.def" "publish/Songs/S2 Taiko Towers/box.def" "publish/Songs/X1 Favorite/*" "publish/Songs/X2 Recent/*" "publish/Songs/X3 Search By Difficulty/*"
-          cd ..\..\..\..\..\
-      
+                
       - name: Build for Linux x64
         shell: cmd
         run: |
@@ -166,13 +153,16 @@ jobs:
         with:
           tag_name: "${{steps.get-version.outputs.version}}"
           release_name: OpenTaiko v${{steps.get-version.outputs.version}}
+          body: |
+            Note: The releases do not contain skins nor songs.
+            Please download/update through the OpenTaikoHub: https://github.com/OpenTaiko/OpenTaiko-Hub/releases
           draft: false
           prerelease: false
      
       - name: Upload All Builds
         uses: xresloader/upload-to-github-release@v1.4.2
         with:
-          file: "OpenTaiko.Win.x64.zip;OpenTaiko.Mac.x64.zip;OpenTaiko.Linux.x64.zip"
+          file: "OpenTaiko.Win.x64.zip;OpenTaiko.Linux.x64.zip"
           overwrite: true
           tag_name: "${{steps.get-version.outputs.version}}"
           draft: false
