@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.1.4] - 2024-10-26 (Beta)
+
+- Test stuff on autobuild
+
 ## [0.6.1.3] - 2024-10-16 (Beta)
 
 
