@@ -1,5 +1,9 @@
 # Changelog
 
+## [] - 2024-10-31 (Beta)
+
+- lets try cool stuff
+
 ## [0.6.1.6] - 2024-10-31 (Beta)
 
 - Yes or nah
