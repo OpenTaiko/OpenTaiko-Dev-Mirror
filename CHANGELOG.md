@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.1.6] - 2024-10-31 (Beta)
+
+- Yes or nah
+
 ## [0.6.1.5] - 2024-10-30 (Beta)
 
 - Yes or nah
